@@ -1,0 +1,102 @@
+@startuml
+class Chessy {
+  Game mode
+  FPSCounter fps
+}
+class Renderer{
+  SDLWindow window
+  SDLRenderer renderer
+  SDLTextures[] textures
+}
+class Controller{
+  Action select
+}
+class Game {
+  GameMode game
+  GameWorld world
+  Controller controller
+}
+class GameMode{
+  shared<GameState> state
+  MoveValidator validator
+  MoveCalculator calculator
+}
+class GameWorld{
+  Chessboard chessboard
+  array<RenderTile, 64> view
+}
+class MoveValidator{
+}
+class MoveCalculator{
+}
+class GameState{
+  EGameState state
+  PromotionCache cache
+  EnPassantCache enPassant
+  CheckCache checkCache
+  array<TileState, 64> positions
+}
+class TileState
+{
+    Moves hits
+    Moves moves
+}
+class EnPassantCache
+{
+  Position takePos
+  Position piecePos
+}
+class Chessboard{
+  array<ChessboardTile, 64> tiles
+}
+class ChessboardTile{
+  Color color
+  optional<ChessPiece> cp
+}
+enum ChessPieces {
+  Pawn
+  Knight
+  Bishop
+  Rook
+  Queen
+  King
+}
+abstract ChessPiece{
+  Move chessMoves
+  Color color
+  Type type
+  bool hasMoved
+}
+
+ChessPiece --> ChessPieces
+ChessPiece -right- King
+ChessPiece -right- Queen
+ChessPiece -right- Rook
+ChessPiece -right- Bishop
+ChessPiece -right- Knight
+ChessPiece -right- Pawn
+
+ChessboardTile -- ChessPiece
+
+Chessboard -- ChessboardTile
+
+GameState -- TileState
+GameState -- EnPassantCache
+
+GameMode -- MoveValidator
+GameMode -- MoveCalculator
+GameMode -- GameState
+
+GameWorld -- Chessboard 
+
+Game -- GameWorld
+Game -- GameMode
+Game -- Controller
+
+Controller -right- GameMode
+
+Chessy -- Input
+Chessy -- Renderer
+Chessy -right- FPSCounter
+Chessy -- Game
+@enduml
