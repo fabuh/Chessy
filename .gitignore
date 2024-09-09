@@ -1,0 +1,12 @@
+# Ignore visual studio dir
+.vs
+
+# Ignore sln and project files
+prj/vs2022
+*.sln
+
+# Ignore build
+build/**
+
+# Keep game archive
+!build/Chessy.zip
